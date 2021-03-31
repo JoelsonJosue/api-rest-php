@@ -6,7 +6,27 @@ use Util\ConstantesGenericasUtil;
 use JsonException;
 
 class JsonUtil {
+
+    public function processarArrayParaRetornar($retorno){
+        $dados = [];
+        $dados[ConstantesGenericasUtil::TIPO] = ConstantesGenericasUtil::TIPO_ERRO;
+
+        if(is_array($retorno) && count($retorno) > 0 || strlen($retorno) > 10){
+            $dados[ConstantesGenericasUtil::TIPO] = ConstantesGenericasUtil::TIPO_SUCESSO;
+            $dados[ConstantesGenericasUtil::RESPOSTA] = $retorno;
+        }
+
+        $this->retornarJson($dados);
+    }
     
+    public function retornarJson($json){
+        header('Content-Type: application/json');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+        echo json_encode($json);
+        exit;
+    }
+
     public static function tratarCorpoRequisicaoJson(){
        
         try {

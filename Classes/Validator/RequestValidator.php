@@ -6,6 +6,7 @@ use Util\ConstantesGenericasUtil;
 use Util\JsonUtil;
 use Repository\TokensAutorizadosRepository;
 use Service\UsuariosService;
+use InvalidArgumentException;
 
 class RequestValidator {
 
@@ -43,6 +44,7 @@ class RequestValidator {
     }
 
     private function get(){
+
         $retorno = ConstantesGenericasUtil::MSG_ERRO_TIPO_ROTA;
         if(in_array($this->request['rota'], ConstantesGenericasUtil::TIPO_GET)){
             
@@ -50,9 +52,15 @@ class RequestValidator {
                 case self::USUARIOS:
                     $UsuariosService = new UsuariosService($this->request);
                     $retorno = $UsuariosService->validarGet();
+                    break;
+                default:
+                    throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
             }
 
         }
+
+        return $retorno;
+        
     }
 
 }

@@ -21,6 +21,7 @@ class UsuariosService{
     }
 
     public function validarGet(){
+
         $retorno = null;
         $recurso = $this->dados['recurso'];
         if(in_array($recurso, self::RECURSOS_GET)){
@@ -33,10 +34,12 @@ class UsuariosService{
             throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
         }
 
+        return $retorno;
+
     }
 
     private function getOneByKey(){
-
+        return $this->UsuariosRepository->getPostgreSQL()->getOneByKey(self::TABELA, $this->dados['id']);
     }
 
     private function listar(){
