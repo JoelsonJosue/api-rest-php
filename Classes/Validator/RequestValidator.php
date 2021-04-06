@@ -63,4 +63,24 @@ class RequestValidator {
         
     }
 
+    private function delete(){
+
+        $retorno = ConstantesGenericasUtil::MSG_ERRO_TIPO_ROTA;
+        if(in_array($this->request['rota'], ConstantesGenericasUtil::TIPO_DELETE)){
+            
+            switch ($this->request['rota']) {
+                case self::USUARIOS:
+                    $UsuariosService = new UsuariosService($this->request);
+                    $retorno = $UsuariosService->validarDelete();
+                    break;
+                default:
+                    throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
+            }
+
+        }
+
+        return $retorno;
+        
+    }
+
 }
