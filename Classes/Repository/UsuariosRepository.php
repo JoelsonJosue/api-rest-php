@@ -24,6 +24,17 @@ class UsuariosRepository{
         return $stmt->rowCount();
     }
 
+    public function updateUser($id, $dados){
+        $consultaUpdate = 'UPDATE '. self::TABELA . ' SET login = :login, senha = :senha WHERE id = :id';
+        $this->PostgreSQL->getDb()->beginTransaction();
+        $stmt = $this->PostgreSQL->getDb()->prepare($consultaUpdate);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':login', $dados['login']);
+        $stmt->bindParam(':senha', $dados['senha']);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+
     public function getPostgreSQL(){
         return $this->PostgreSQL;
     }

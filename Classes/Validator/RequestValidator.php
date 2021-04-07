@@ -104,4 +104,25 @@ class RequestValidator {
         
     }
 
+    private function put(){
+
+        $retorno = ConstantesGenericasUtil::MSG_ERRO_TIPO_ROTA;
+        if(in_array($this->request['rota'], ConstantesGenericasUtil::TIPO_PUT)){
+            
+            switch ($this->request['rota']) {
+                case self::USUARIOS:
+                    $UsuariosService = new UsuariosService($this->request);
+                    $UsuariosService->setDadosCorpoRequest($this->dadosRequest);
+                    $retorno = $UsuariosService->validarPut();
+                    break;
+                default:
+                    throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
+            }
+
+        }
+
+        return $retorno;
+        
+    }
+
 }

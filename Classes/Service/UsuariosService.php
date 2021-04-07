@@ -12,6 +12,7 @@ class UsuariosService{
     public const RECURSOS_GET = ['listar'];
     public const RECURSOS_DELETE = ['deletar'];
     public const RECURSOS_POST = ['cadastrar'];
+    public const RECURSOS_PUT = ['atualizar'];
 
     private $dados;
 
@@ -83,6 +84,29 @@ class UsuariosService{
 
     }
 
+    public function validarPut(){
+
+        $retorno = null;
+        $recurso = $this->dados['recurso'];
+        if(in_array($recurso, self::RECURSOS_PUT)){
+            if($this->dados['id'] > 0){
+                $retorno = $this->$recurso();
+            }else{
+                throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_ID_OBRIGATORIO);
+            }
+            //$retorno = $this->dados['id'] > 0 ? $this->getOneByKey() : $this->$recurso();
+        }else{
+            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
+        }
+
+        if($retorno === null){
+            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
+        }
+
+        return $retorno;
+
+    }
+
     public function setDadosCorpoRequest($dadosRequest){
         $this->dadosCorpoRequest = $dadosRequest;
     }
@@ -112,6 +136,15 @@ class UsuariosService{
             throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
         }
         throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_LOGIN_SENHA_OBRIGATORIO);
+    }
+
+    private function atualizar(){
+        if($this->UsuariosRepository->updateUser($this->dados['id'], $this->dadosCorpoRequest) > 0){
+           $this->UsuariosRepository->getPostgreSQL()->getDb()->commit();
+           return ConstantesGenericasUtil::MSG_ATUALIZADO_SUCESSO;
+        }
+        $this->UsuariosRepository->getPostgreSQL()->getDb()->rollBack();
+        throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_NAO_AFETADO);
     }
 
 }
