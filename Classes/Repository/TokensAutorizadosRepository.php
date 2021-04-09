@@ -6,14 +6,30 @@ use Util\ConstantesGenericasUtil;
 use InvalidArgumentException;
 
 class TokensAutorizadosRepository{
-
+    
+    /**
+     * PostgreSQL
+     *
+     * @var object
+     */
     private $PostgreSQL;
     public const TABELA = 'tokens_autorizados';
-
+    
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct(){
         $this->PostgreSQL = new PostgreSQL();
     }
-
+    
+    /**
+     * validarToken
+     *
+     * @param  mixed $token
+     * @return void
+     */
     public function validarToken($token){
 
         $token = str_replace([' ', 'Bearer'], '', $token);
@@ -36,7 +52,12 @@ class TokensAutorizadosRepository{
         }
 
     }
-
+    
+    /**
+     * getPostgreSQL
+     *
+     * @return object
+     */
     public function getPostgreSQL(){
         return $this->PostgreSQL;
     }

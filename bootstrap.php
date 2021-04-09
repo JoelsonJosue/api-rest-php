@@ -1,8 +1,8 @@
 <?php 
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ERROR);
+ini_set('display_errors', '1'); //Alterar para valor 0 quando estiver em produção 
+ini_set('display_startup_errors', '1'); //Excluir linha quando estiver em produção 
+error_reporting(E_ERROR); //Excluir linha quando estiver em produção 
 
 define(HOST, 'localhost');
 define(PORTA, '5432');

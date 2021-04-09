@@ -6,7 +6,13 @@ use Util\ConstantesGenericasUtil;
 use JsonException;
 
 class JsonUtil {
-
+    
+    /**
+     * processarArrayParaRetornar
+     *
+     * @param mixed $retorno
+     * @return void
+     */
     public function processarArrayParaRetornar($retorno){
         $dados = [];
         $dados[ConstantesGenericasUtil::TIPO] = ConstantesGenericasUtil::TIPO_ERRO;
@@ -18,7 +24,13 @@ class JsonUtil {
 
         $this->retornarJson($dados);
     }
-    
+        
+    /**
+     * retornarJson
+     *
+     * @param mixed $json
+     * @return void
+     */
     public function retornarJson($json){
         header('Content-Type: application/json');
         header('Cache-Control: no-cache, no-store, must-revalidate');
@@ -26,7 +38,12 @@ class JsonUtil {
         echo json_encode($json);
         exit;
     }
-
+    
+    /**
+     * tratarCorpoRequisicaoJson
+     *
+     * @return mixed
+     */
     public static function tratarCorpoRequisicaoJson(){
        
         try {

@@ -6,14 +6,31 @@ use DB\PostgreSQL;
 //use InvalidArgumentException;
 
 class UsuariosRepository{
-
+    
+    /**
+     * PostgreSQL
+     *
+     * @var object
+     */
     private $PostgreSQL;
     public const TABELA = 'usuarios';
-
+    
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct(){
         $this->PostgreSQL = new PostgreSQL();
     }
-
+    
+    /**
+     * insertUser
+     *
+     * @param  mixed $login
+     * @param  mixed $senha
+     * @return int
+     */
     public function insertUser($login, $senha){
         $consultaInsert = 'INSERT INTO '. self::TABELA . '(login, senha) VALUES (:login, :senha)';
         $this->PostgreSQL->getDb()->beginTransaction();
@@ -23,7 +40,14 @@ class UsuariosRepository{
         $stmt->execute();
         return $stmt->rowCount();
     }
-
+    
+    /**
+     * updateUser
+     *
+     * @param  mixed $id
+     * @param  mixed $dados
+     * @return int
+     */
     public function updateUser($id, $dados){
         $consultaUpdate = 'UPDATE '. self::TABELA . ' SET login = :login, senha = :senha WHERE id = :id';
         $this->PostgreSQL->getDb()->beginTransaction();
@@ -34,7 +58,12 @@ class UsuariosRepository{
         $stmt->execute();
         return $stmt->rowCount();
     }
-
+    
+    /**
+     * getPostgreSQL
+     *
+     * @return object
+     */
     public function getPostgreSQL(){
         return $this->PostgreSQL;
     }

@@ -13,18 +13,44 @@ class UsuariosService{
     public const RECURSOS_DELETE = ['deletar'];
     public const RECURSOS_POST = ['cadastrar'];
     public const RECURSOS_PUT = ['atualizar'];
-
+    
+    /**
+     * dados
+     *
+     * @var array
+     */
     private $dados;
-
+    
+    /**
+     * dadosCorpoRequest
+     *
+     * @var array
+     */
     private $dadosCorpoRequest = [];
-
+    
+    /**
+     * UsuariosRepository
+     *
+     * @var object
+     */
     private $UsuariosRepository;
-
+    
+    /**
+     * __construct
+     *
+     * @param array $dados
+     * @return void
+     */
     public function __construct($dados = []){
         $this->dados = $dados;
         $this->UsuariosRepository = new UsuariosRepository();
     }
-
+    
+    /**
+     * validarGet
+     *
+     * @return mixed
+     */
     public function validarGet(){
 
         $retorno = null;
@@ -35,37 +61,39 @@ class UsuariosService{
             throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
         }
 
-        if($retorno === null){
-            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
-        }
+        $this->validarRetornoRequest($retorno);
 
         return $retorno;
 
     }
-
+    
+    /**
+     * validarDelete
+     *
+     * @return mixed
+     */
     public function validarDelete(){
 
         $retorno = null;
         $recurso = $this->dados['recurso'];
         if(in_array($recurso, self::RECURSOS_DELETE)){
-            if($this->dados['id'] > 0){
-                $retorno = $this->$recurso();
-            }else{
-                throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_ID_OBRIGATORIO);
-            }
+            $retorno = $this->validarIdObrigatorio($recurso);
             //$retorno = $this->dados['id'] > 0 ? $this->getOneByKey() : $this->$recurso();
         }else{
             throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
         }
 
-        if($retorno === null){
-            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
-        }
+        $this->validarRetornoRequest($retorno);
 
         return $retorno;
 
     }
-
+    
+    /**
+     * validarPost
+     *
+     * @return mixed
+     */
     public function validarPost(){
 
         $retorno = null;
@@ -76,32 +104,29 @@ class UsuariosService{
             throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
         }
 
-        if($retorno === null){
-            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
-        }
+        $this->validarRetornoRequest($retorno);
 
         return $retorno;
 
     }
-
+    
+    /**
+     * validarPut
+     *
+     * @return mixed
+     */
     public function validarPut(){
 
         $retorno = null;
         $recurso = $this->dados['recurso'];
         if(in_array($recurso, self::RECURSOS_PUT)){
-            if($this->dados['id'] > 0){
-                $retorno = $this->$recurso();
-            }else{
-                throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_ID_OBRIGATORIO);
-            }
+            $retorno = $this->validarIdObrigatorio($recurso);
             //$retorno = $this->dados['id'] > 0 ? $this->getOneByKey() : $this->$recurso();
         }else{
             throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_RECURSO_INEXISTENTE);
         }
 
-        if($retorno === null){
-            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
-        }
+        $this->validarRetornoRequest($retorno);
 
         return $retorno;
 
@@ -145,6 +170,33 @@ class UsuariosService{
         }
         $this->UsuariosRepository->getPostgreSQL()->getDb()->rollBack();
         throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_NAO_AFETADO);
+    }
+    
+    /**
+     * validarRetornoRequest
+     *
+     * @param mixed $retorno
+     * @return void
+     */
+    private function validarRetornoRequest($retorno){
+        if($retorno === null){
+            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_GENERICO);
+        }
+    }
+    
+    /**
+     * validarIdObrigatorio
+     *
+     * @param mixed $recurso
+     * @return mixed
+     */
+    private function validarIdObrigatorio($recurso){
+        if($this->dados['id'] > 0){
+            $retorno = $this->$recurso();
+        }else{
+            throw new InvalidArgumentException(ConstantesGenericasUtil::MSG_ERRO_ID_OBRIGATORIO);
+        }
+        return $retorno;
     }
 
 }
